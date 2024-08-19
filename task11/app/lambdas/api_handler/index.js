@@ -12,13 +12,6 @@ let userPoolID;
 let userClientID;
 
 export const handler = async (event) => {
-  const corsHeaders = {
-    "Access-Control-Allow-Headers":
-      "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "*",
-    "Accept-Version": "*",
-  };
   console.log("~~~EVENT~~~~", event);
 
   const httpMethod = event.httpMethod;
@@ -52,6 +45,13 @@ export const handler = async (event) => {
     console.log("~~~inside 8~~~~");
     return {
       statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ message: "Invalid request" }),
     };
   }
@@ -122,14 +122,26 @@ const signupHandler = async (event) => {
     const req = await cognito.adminCreateUser(params).promise();
     return {
       statusCode: 200,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ message: "Sign-up process is successful" }),
     };
   } catch (error) {
     console.log("We are in catch block(signupHandler)", error.message);
     return {
       statusCode: 400,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ message: error.message }),
     };
   }
@@ -177,7 +189,13 @@ const signinHandler = async (event) => {
         .promise();
       return {
         statusCode: 200,
-        headers: corsHeaders,
+        headers: {
+          "Access-Control-Allow-Headers":
+            "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Accept-Version": "*",
+        },
         body: JSON.stringify({
           accessToken: challengeResponse.AuthenticationResult.AccessToken,
         }),
@@ -185,7 +203,13 @@ const signinHandler = async (event) => {
     } else {
       return {
         statusCode: 200,
-        headers: corsHeaders,
+        headers: {
+          "Access-Control-Allow-Headers":
+            "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Accept-Version": "*",
+        },
         body: JSON.stringify({
           accessToken: response.AuthenticationResult.IdToken,
         }),
@@ -196,7 +220,13 @@ const signinHandler = async (event) => {
 
     return {
       statusCode: 400,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ message: error.message }),
     };
   }
@@ -211,7 +241,13 @@ const getTablesHandler = async (event) => {
     const data = await dynamoDb.scan(params).promise();
     return {
       statusCode: 200,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ tables: data.Items }),
     };
   } catch (error) {
@@ -219,7 +255,13 @@ const getTablesHandler = async (event) => {
 
     return {
       statusCode: 400,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ message: error.message }),
     };
   }
@@ -244,14 +286,26 @@ const createTableHandler = async (event) => {
     const data = await dynamoDb.put(params).promise();
     return {
       statusCode: 200,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ id: +params.Item.id }),
     };
   } catch (error) {
     console.log("~~~We are in catch block(createTableHandler)", error.message);
     return {
       statusCode: 400,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ message: error.message }),
     };
   }
@@ -271,14 +325,26 @@ const getTableByIdHandler = async (event) => {
     const data = await dynamoDb.get(params).promise();
     return {
       statusCode: 200,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify(data.Item),
     };
   } catch (error) {
     console.log("~~~We are in catch block(getbyhandler)", error.message);
     return {
       statusCode: 400,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ message: error.message }),
     };
   }
@@ -314,7 +380,13 @@ export const createReservationHandler = async (event) => {
       console.log("~~~!tableExists~~~");
       return {
         statusCode: 400,
-        headers: corsHeaders,
+        headers: {
+          "Access-Control-Allow-Headers":
+            "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Accept-Version": "*",
+        },
         body: JSON.stringify({ message: "Table is not exist" }),
       };
     } else {
@@ -332,7 +404,13 @@ export const createReservationHandler = async (event) => {
       if (reservationIntersects(eventObj, reservData)) {
         return {
           statusCode: 400,
-          headers: corsHeaders,
+          headers: {
+            "Access-Control-Allow-Headers":
+              "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Accept-Version": "*",
+          },
           body: JSON.stringify({ message: "Reservation already exists" }),
         };
       } else {
@@ -352,7 +430,13 @@ export const createReservationHandler = async (event) => {
 
         return {
           statusCode: 200,
-          headers: corsHeaders,
+          headers: {
+            "Access-Control-Allow-Headers":
+              "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Accept-Version": "*",
+          },
           body: JSON.stringify({ reservationId: params.Item.id }),
         };
       }
@@ -361,7 +445,13 @@ export const createReservationHandler = async (event) => {
     console.log("Error in createReservationHandler catch:", error.message);
     return {
       statusCode: 400,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ message: error.message }),
     };
   }
@@ -374,8 +464,8 @@ function reservationIntersects(event, data) {
   console.log("~~~Reservedata~~~", reservData);
   for (let i = 0; i < reservData.Items.length; i++) {
     const r_item = reservData.Items[i];
-    console.log("r_item",r_item);
-    
+    console.log("r_item", r_item);
+
     if (event.tableNumber === r_item.tableNumber && event.date == r_item.date) {
       const resStart = parseTime(r_item.slotTimeStart);
       const resEnd = parseTime(r_item.slotTimeEnd);
@@ -386,7 +476,7 @@ function reservationIntersects(event, data) {
       console.log("eventStart", eventStart);
       console.log("eventStart", eventEnd);
 
-      return eventStart <= resEnd && eventEnd >= resStart ? true : false
+      return eventStart <= resEnd && eventEnd >= resStart ? true : false;
     }
   }
   return false;
@@ -411,7 +501,13 @@ const getReservationsHandler = async (event) => {
     console.log("~~~data from getReserv", data);
     return {
       statusCode: 200,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ reservations: data.Items }),
     };
   } catch (error) {
@@ -419,7 +515,13 @@ const getReservationsHandler = async (event) => {
 
     return {
       statusCode: 400,
-      headers: corsHeaders,
+      headers: {
+        "Access-Control-Allow-Headers":
+          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Accept-Version": "*",
+      },
       body: JSON.stringify({ message: error.message }),
     };
   }
