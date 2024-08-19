@@ -840,8 +840,10 @@
         "in": "header",
         "x-amazon-apigateway-authtype": "cognito_user_pools",
         "x-amazon-apigateway-authorizer": {
-          "type": "cognito_user_pools",
-          "x-syndicate-cognito-userpool-names": ["${booking_userpool}"]
+          "type": "COGNITO_USER_POOLS",
+          "identity_source": "method.request.header.Authorization",
+          "x-syndicate-cognito-userpool-names": ["${booking_userpool}"],
+          "ttl": 300
         }
       }
     }
