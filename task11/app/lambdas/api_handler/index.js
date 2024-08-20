@@ -12,37 +12,25 @@ let userPoolID;
 let userClientID;
 
 export const handler = async (event) => {
-  console.log("~~~EVENT~~~~", event);
-
   const httpMethod = event.httpMethod;
   const path = event.path;
-
   const eventBody = event.body;
-  console.log("~~~event body~~~~", eventBody);
 
   if (path === "/signup" && httpMethod === "POST") {
-    console.log("~~~inside 1~~~~");
     return await signupHandler(eventBody);
   } else if (path === "/signin" && httpMethod === "POST") {
-    console.log("~~~inside 2~~~~");
     return await signinHandler(eventBody);
   } else if (path === "/tables" && httpMethod === "POST") {
-    console.log("~~~inside 3~~~~");
     return await createTableHandler(eventBody);
   } else if (path === "/tables" && httpMethod === "GET") {
-    console.log("~~~inside 4~~~~");
     return await getTablesHandler(eventBody);
   } else if (path === "/reservations" && httpMethod === "POST") {
-    console.log("~~~inside 5~~~~");
     return await createReservationHandler(eventBody);
   } else if (path && path.startsWith("/tables/") && httpMethod === "GET") {
-    console.log("~~~inside 6~~~~");
     return await getTableByIdHandler(event);
   } else if (path === "/reservations" && httpMethod === "GET") {
-    console.log("~~~inside 7~~~~");
     return await getReservationsHandler(eventBody);
   } else {
-    console.log("~~~inside 8~~~~");
     return {
       statusCode: 400,
       headers: {
@@ -350,34 +338,25 @@ const getTableByIdHandler = async (event) => {
   }
 };
 
-// ! My code
+// /reservation POST
 export const createReservationHandler = async (event) => {
-  console.log("We are in createReservationHandler, event is - ", event);
   const eventObj = JSON.parse(event);
-  console.log("~~~eventObj (event body parsed)", eventObj);
-
   const tableParams = {
     TableName: T_tables,
   };
 
   try {
-    console.log("~~~We are in createReservations try block");
-
     const tableData = await dynamoDb.scan(tableParams).promise();
-    console.log("~~~tableData", tableData);
-
     let tableExists = false;
 
     for (let i = 0; i < tableData.Items.length; i++) {
       const t_item = tableData.Items[i];
       if (eventObj.tableNumber === t_item.number) {
-        console.log("~~~t_item~~~", t_item);
         tableExists = true;
       }
     }
 
     if (!tableExists) {
-      console.log("~~~!tableExists~~~");
       return {
         statusCode: 400,
         headers: {
@@ -390,16 +369,10 @@ export const createReservationHandler = async (event) => {
         body: JSON.stringify({ message: "Table is not exist" }),
       };
     } else {
-      console.log("~~~ else of !tableExists~~~");
       const reserveTableParams = {
         TableName: T_reservations,
       };
       const reservData = await dynamoDb.scan(reserveTableParams).promise();
-
-      console.log(
-        "~~~resIntercests~~~",
-        reservationIntersects(eventObj, reservData)
-      );
 
       if (reservationIntersects(eventObj, reservData)) {
         return {
@@ -458,24 +431,14 @@ export const createReservationHandler = async (event) => {
 };
 
 function reservationIntersects(event, data) {
-  console.log("~~~event in resIntersects~~~", event);
-
   const reservData = data;
-  console.log("~~~Reservedata~~~", reservData);
   for (let i = 0; i < reservData.Items.length; i++) {
     const r_item = reservData.Items[i];
-    console.log("r_item", r_item);
-
     if (event.tableNumber === r_item.tableNumber && event.date == r_item.date) {
       const resStart = parseTime(r_item.slotTimeStart);
       const resEnd = parseTime(r_item.slotTimeEnd);
       const eventStart = parseTime(event.slotTimeStart);
       const eventEnd = parseTime(event.slotTimeEnd);
-      console.log("resStart", resStart);
-      console.log("resStart", resEnd);
-      console.log("eventStart", eventStart);
-      console.log("eventStart", eventEnd);
-
       return eventStart <= resEnd && eventEnd >= resStart ? true : false;
     }
   }
@@ -487,18 +450,14 @@ function parseTime(timeStr) {
   return new Date(0, 0, 0, hours, minutes);
 }
 
+// /reservation GET
 const getReservationsHandler = async (event) => {
-  console.log("We in getReservationsHandler, event is - ", event);
-
   const params = {
     TableName: T_reservations,
   };
 
   try {
-    console.log("~~~We are in try block(getReserv)");
-
     const data = await dynamoDb.scan(params).promise();
-    console.log("~~~data from getReserv", data);
     return {
       statusCode: 200,
       headers: {
